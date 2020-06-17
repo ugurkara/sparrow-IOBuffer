@@ -1,9 +1,21 @@
 # Sparrow-IOBuffer
+
+Sparrow-IOBuffer provides a mechanism simplify use of the bytebuffer.
+
 ``` java
-        Scheduler.schedulePerXSecond(new Runnable() {
+
+        IOBuffer ioBuffer = IOBuffer.allocate(128);
+        ioBuffer.addListener(new IOBufferChangeAdapter() {
             @Override
-            public void run() {
-                System.out.println("per 10 sec. Initial wait is 20 sec!");
+            public void changed(int index, Double oldValue, Double newValue) {
+                System.out.println(index + " .Double value changed from +" + oldValue + " to " + newValue);
             }
-        }, 10, 20);
+        });
+
+        DoubleIOBuffer doubleIOBuffer = ioBuffer.doubleBuffer();
+        
+        for (int i = 0; i < doubleIOBuffer.getSize(); i++) {
+            doubleIOBuffer.setValue(i, Math.random()*1000);
+        }
+        
 ```
