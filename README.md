@@ -1,6 +1,6 @@
 # Sparrow-IOBuffer
 
-Sparrow-IOBuffer provides a mechanism simplify use of the bytebuffer.
+Sparrow-IOBuffer provides a mechanism simplify use of the ByteBuffer. 
 
 ``` java
 
