@@ -21,9 +21,9 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class FloatIOBuffer extends IONumberBuffer<Float> {
-    
-    private static final int BYTE_SIZE = 4;
+public class FloatIOBuffer extends DWordIOBuffer<Float> {
+
+
 
     public FloatIOBuffer(int size) {
         super(size);
@@ -31,26 +31,19 @@ public class FloatIOBuffer extends IONumberBuffer<Float> {
 
     @Override
     public Float getValue(int index) {
-        return getBuffer().getFloat(index * BYTE_SIZE);
+        return Float.intBitsToFloat(intValue(index));
     }
 
     @Override
     public void setValue(int index, Float value) {
         Float oldValue = getValue(index);
         if (oldValue.floatValue() != value.floatValue()) {
-            getBuffer().putFloat(index * BYTE_SIZE,value);
+            intValue(index, Float.floatToIntBits(value));
             fireListeners(index, oldValue, value);
         }
 
     }
 
-    @Override
-    public int getSize() {
-        return getBuffer().capacity() / BYTE_SIZE;
-    }
-    
-    
-    
     @Override
     protected void put(ByteBuffer src, int offset) {
         for (int i = 0; i < getSize(); i++) {

@@ -27,17 +27,17 @@ public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
         super(size);
     }
 
-    protected Byte byteValue(int index) {
-        return getBuffer().get(index / 8);
+    protected Byte byteValueOfBit(int index) {
+        return byteValue(index / 8);
     }
 
-    protected void byteValue(int index, Byte value) {
-        getBuffer().put(index / 8, value);
+    protected void byteValueOfBit(int index, Byte value) {
+        byteValue(index / 8, value);
     }
 
     @Override
     public Boolean getValue(int index) {
-        return getBit(index % 8, byteValue(index));
+        return getBit(index % 8, byteValueOfBit(index));
     }
 
     @Override
@@ -47,8 +47,8 @@ public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
 
         if (value.booleanValue() != oldValue.booleanValue()) {
             int bitIndex = bitIndexOf(index);
-            byte b = value ? setBitOn(bitIndex, byteValue(index)) : setBitOff(bitIndex, byteValue(index));
-            byteValue(index, b);
+            byte b = value ? setBitOn(bitIndex, BooleanIOBuffer.this.byteValueOfBit(index)) : setBitOff(bitIndex, BooleanIOBuffer.this.byteValueOfBit(index));
+            byteValueOfBit(index, b);
             fireListeners(index, oldValue, value);
 
         }
@@ -57,7 +57,7 @@ public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
 
     @Override
     public int getSize() {
-        return getBuffer().capacity() * 8;
+        return getByteSize() * 8;
     }
 
     public static byte setBitOff(int index, byte b) {
@@ -97,9 +97,9 @@ public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
 
     @Override
     protected void put(ByteBuffer src, int offset) {
-        
-        for (int i = 0; i < getBuffer().capacity(); i++) {
-            byte oldValue = getBuffer().get(i);
+
+        for (int i = 0; i < getByteSize(); i++) {
+            byte oldValue = byteValue(i);
             byte value = src.get(i + offset);
 
             if (oldValue != value) {

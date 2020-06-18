@@ -207,7 +207,7 @@ public class IOBufferTest {
     @Test
     public void testChar() {
 
-        UnsignedShortIOBuffer buf = ioBuffer.unsignedShortBuffer();
+        UShortIOBuffer buf = ioBuffer.unsignedShortBuffer();
 
         for (int i = 0; i < buf.getSize(); i++) {
             buf.setValue(i, 0);

@@ -29,14 +29,14 @@ public class ByteIOBuffer extends IONumberBuffer<Byte> {
 
     @Override
     public Byte getValue(int index) {
-        return getBuffer().get(index);
+        return byteValue(index);
     }
 
     @Override
     public void setValue(int index, Byte value) {
         Byte oldValue = getValue(index);
         if (value.byteValue() != oldValue.byteValue()) {
-            getBuffer().put(index, value);
+            byteValue(index, value);
             fireListeners(index, oldValue, value);
         }
 
@@ -44,7 +44,7 @@ public class ByteIOBuffer extends IONumberBuffer<Byte> {
 
     @Override
     public int getSize() {
-        return getBuffer().capacity();
+        return getByteSize();
     }
 
     @Override

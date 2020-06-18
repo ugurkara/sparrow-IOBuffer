@@ -21,9 +21,9 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class IntegerIOBuffer extends IONumberBuffer<Integer> {
+public class IntegerIOBuffer extends DWordIOBuffer<Integer> {
 
-    private static final int BYTE_SIZE = 4;
+    
 
     public IntegerIOBuffer(int size) {
         super(size);
@@ -31,7 +31,7 @@ public class IntegerIOBuffer extends IONumberBuffer<Integer> {
 
     @Override
     public Integer getValue(int index) {
-        return getBuffer().getInt(index * BYTE_SIZE);
+        return intValue(index);
     }
 
     @Override
@@ -40,14 +40,9 @@ public class IntegerIOBuffer extends IONumberBuffer<Integer> {
         Integer oldValue = getValue(index);
 
         if (oldValue.intValue() != value.intValue()) {
-            getBuffer().putInt(index * BYTE_SIZE,value);
+            intValue(index, value);
             fireListeners(index, oldValue, value);
         }
-    }
-
-    @Override
-    public int getSize() {
-        return getBuffer().capacity() / BYTE_SIZE;
     }
 
     @Override

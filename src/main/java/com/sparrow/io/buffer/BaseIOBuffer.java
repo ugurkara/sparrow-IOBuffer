@@ -26,15 +26,19 @@ import java.util.function.Consumer;
  */
 public abstract class BaseIOBuffer<T> {
 
-    private final ByteBuffer buffer;
+    private final byte[] buffer;
 
     private final ArrayList<IOBufferValueChangeListener> listeners = new ArrayList();
 
     protected BaseIOBuffer(int size) {
-        buffer = ByteBuffer.allocate(size);
+        buffer = new byte[size];
     }
 
     public abstract int getSize();
+
+    public int getByteSize() {
+        return buffer.length;
+    }
 
     public abstract T getValue(int index);
 
@@ -50,13 +54,7 @@ public abstract class BaseIOBuffer<T> {
         listeners.remove(listener);
     }
 
-    protected ByteBuffer getBuffer() {
-        return buffer;
-    }
-
-
     protected void fireListeners(int index, T oldValue, T newValue) {
-
 
         listeners.forEach(new Consumer<IOBufferValueChangeListener>() {
             @Override
@@ -65,6 +63,14 @@ public abstract class BaseIOBuffer<T> {
             }
         });
 
+    }
+    
+    protected byte byteValue(int index) {
+        return buffer[index];
+    }
+
+    protected void byteValue(int index, byte value) {
+        buffer[index] = value;
     }
 
 }

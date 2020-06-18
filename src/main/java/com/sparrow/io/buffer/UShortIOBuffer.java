@@ -21,34 +21,25 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class UnsignedShortIOBuffer extends IONumberBuffer<Integer> {
+public class UShortIOBuffer extends WordIOBuffer<Integer> {
 
-    private static final int BYTE_SIZE = 2;
-
-    public UnsignedShortIOBuffer(int size) {
+    public UShortIOBuffer(int size) {
         super(size);
     }
 
     @Override
     public Integer getValue(int index) {
-        return (int) getBuffer().getChar(index * BYTE_SIZE);
+        return charValue(index);
     }
 
     @Override
     public void setValue(int index, Integer value) {
-
         Integer oldValue = getValue(index);
-
         if (oldValue.intValue() != value.intValue()) {
-            getBuffer().putChar(index * BYTE_SIZE, (char) value.intValue());
+            charValue(index, value);
             fireListeners(index, oldValue, value);
         }
 
-    }
-
-    @Override
-    public int getSize() {
-        return getBuffer().capacity() / BYTE_SIZE;
     }
 
     @Override

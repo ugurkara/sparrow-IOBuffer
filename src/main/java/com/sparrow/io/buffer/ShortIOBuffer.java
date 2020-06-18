@@ -21,9 +21,7 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class ShortIOBuffer extends IONumberBuffer<Short> {
-
-    private static final int BYTE_SIZE = 2;
+public class ShortIOBuffer extends WordIOBuffer<Short> {
 
     public ShortIOBuffer(int size) {
         super(size);
@@ -31,31 +29,24 @@ public class ShortIOBuffer extends IONumberBuffer<Short> {
 
     @Override
     public Short getValue(int index) {
-        return getBuffer().getShort(index * BYTE_SIZE);
+        return (short) charValue(index);
     }
 
     @Override
     public void setValue(int index, Short value) {
         Short oldValue = getValue(index);
         if (oldValue.shortValue() != value.shortValue()) {
-            getBuffer().putShort(index * BYTE_SIZE, value);
+            charValue(index, value.intValue());
             fireListeners(index, oldValue, value);
         }
 
     }
 
     @Override
-    public int getSize() {
-        return getBuffer().capacity() / BYTE_SIZE;
-    }
-
-    @Override
     protected void put(ByteBuffer src, int offset) {
-        
         for (int i = 0; i < getSize(); i++) {
             setValue(i, src.getShort(i * BYTE_SIZE + offset));
         }
-
     }
 
 }

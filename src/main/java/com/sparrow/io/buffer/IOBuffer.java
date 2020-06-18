@@ -44,20 +44,20 @@ public class IOBuffer {
         buffers.forEach(new Consumer<BaseIOBuffer>() {
             @Override
             public void accept(BaseIOBuffer baseIOBuffer) {
-                
+
                 baseIOBuffer.put(src, offset);
-                
+
             }
         });
-        
+
     }
-    
+
     public void get(ByteBuffer dst, int offset) {
 
-        for(int i=0;i<getSize();i++){
-            dst.put(offset+i, buffer.get(i));
+        for (int i = 0; i < getSize(); i++) {
+            dst.put(offset + i, buffer.get(i));
         }
-        
+
     }
 
     protected ByteBuffer getBuffer() {
@@ -70,7 +70,7 @@ public class IOBuffer {
 
     private ByteIOBuffer bytes = null;
     private ShortIOBuffer shorts = null;
-    private UnsignedShortIOBuffer unsignedShorts = null;
+    private UShortIOBuffer unsignedShorts = null;
     private IntegerIOBuffer integers = null;
     private FloatIOBuffer floats = null;
     private LongIOBuffer longs = null;
@@ -95,9 +95,9 @@ public class IOBuffer {
         return bytes;
     }
 
-    public UnsignedShortIOBuffer unsignedShortBuffer() {
+    public UShortIOBuffer unsignedShortBuffer() {
         if (unsignedShorts == null) {
-            unsignedShorts = new UnsignedShortIOBuffer(buffer.capacity());
+            unsignedShorts = new UShortIOBuffer(buffer.capacity());
             unsignedShorts.addListener(listeners.getUnsignedShortListener());
             buffers.add(unsignedShorts);
         }
@@ -156,7 +156,5 @@ public class IOBuffer {
     public void removeListener(IOBufferChangeListener listener) {
         listeners.removeListener(listener);
     }
-
-
 
 }

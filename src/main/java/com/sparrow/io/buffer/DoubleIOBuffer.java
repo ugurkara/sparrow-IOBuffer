@@ -21,36 +21,29 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class DoubleIOBuffer extends IONumberBuffer<Double> {
+public class DoubleIOBuffer extends LongWordBuffer<Double> {
 
-    private static final int BYTE_SIZE = 8;
-    
     public DoubleIOBuffer(int size) {
         super(size);
     }
 
     @Override
     public Double getValue(int index) {
-        return getBuffer().getDouble(index * BYTE_SIZE);
+        return Double.longBitsToDouble(longValue(index));
     }
 
     @Override
     public void setValue(int index, Double value) {
+
         Double oldValue = getValue(index);
-        
+
         if (oldValue.doubleValue() != value) {
-            getBuffer().putDouble(index * BYTE_SIZE,value);
+            longValue(index, Double.doubleToRawLongBits(value));
             fireListeners(index, oldValue, value);
         }
 
     }
 
-    @Override
-    public int getSize() {
-        return getBuffer().capacity() / BYTE_SIZE;
-    }
-    
-    
     @Override
     protected void put(ByteBuffer src, int offset) {
         for (int i = 0; i < getSize(); i++) {
