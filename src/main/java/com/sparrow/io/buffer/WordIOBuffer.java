@@ -19,7 +19,7 @@ package com.sparrow.io.buffer;
  *
  * @author ugurkara
  */
-public abstract class WordIOBuffer<T extends Number> extends IONumberBuffer<T> {
+public abstract class WordIOBuffer<T extends Number> extends NumberIOBuffer<T> {
 
     public static final int BYTE_SIZE = 2;
 

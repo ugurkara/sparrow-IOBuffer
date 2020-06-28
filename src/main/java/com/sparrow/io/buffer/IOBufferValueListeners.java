@@ -15,6 +15,7 @@
  */
 package com.sparrow.io.buffer;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -24,7 +25,16 @@ import java.util.function.Consumer;
  */
 public class IOBufferValueListeners {
 
+    private final ByteBuffer buffer;
+
     private ArrayList<IOBufferChangeListener> listeners = new ArrayList<>();
+    
+    private final ChangeAdapter changeAdapter=new ChangeAdapter();
+
+    public IOBufferValueListeners(int size) {
+        this.buffer = ByteBuffer.allocate(size);
+        listeners.add(changeAdapter);
+    }
 
     public void addListener(IOBufferChangeListener listener) {
         listeners.add(listener);
@@ -65,7 +75,6 @@ public class IOBufferValueListeners {
     public IOBufferValueChangeListener<Integer> getUnsignedShortListener() {
         return unsignedShortListener;
     }
-    
 
     private final IOBufferValueChangeListener<Byte> byteListener = new IOBufferValueChangeListener<Byte>() {
 
@@ -137,8 +146,7 @@ public class IOBufferValueListeners {
 
         }
     };
-    
-    
+
     private final IOBufferValueChangeListener<Double> doubleListener = new IOBufferValueChangeListener<Double>() {
         @Override
         public void changed(int index, Double oldValue, Double newValue) {
@@ -151,7 +159,7 @@ public class IOBufferValueListeners {
 
         }
     };
-    
+
     private final IOBufferValueChangeListener<Long> longListener = new IOBufferValueChangeListener<Long>() {
         @Override
         public void changed(int index, Long oldValue, Long newValue) {
@@ -164,12 +172,11 @@ public class IOBufferValueListeners {
 
         }
     };
-    
+
     private final IOBufferValueChangeListener<Boolean> booleanListener = new IOBufferValueChangeListener<Boolean>() {
         @Override
         public void changed(int index, Boolean oldValue, Boolean newValue) {
-            
-            
+
             listeners.forEach(new Consumer<IOBufferChangeListener>() {
                 @Override
                 public void accept(IOBufferChangeListener l) {
@@ -179,5 +186,52 @@ public class IOBufferValueListeners {
 
         }
     };
+
+    private class ChangeAdapter implements IOBufferChangeListener {
+
+        @Override
+        public void changed(int index, Boolean oldValue, Boolean newValue) {
+
+        }
+
+        @Override
+        public void changed(int index, Byte oldValue, Byte newValue) {
+            buffer.put(index, newValue);
+        }
+
+        @Override
+        public void changed(int index, Integer oldValue, Integer newValue) {
+            buffer.putInt(index*4, newValue);
+        }
+
+        @Override
+        public void changed(int index, Short oldValue, Short newValue) {
+            buffer.putShort(index*2, newValue);
+        }
+
+        @Override
+        public void changed(int index, Float oldValue, Float newValue) {
+            buffer.putFloat(index*4, newValue);
+        }
+
+        @Override
+        public void changed(int index, Double oldValue, Double newValue) {
+            buffer.putDouble(index*8, newValue);
+        }
+
+        @Override
+        public void changed(int index, Long oldValue, Long newValue) {
+            buffer.putLong(index*8, newValue);
+        }
+
+        @Override
+        public void changed(int index, char oldValue, char newValue) {
+            buffer.putChar(index*2, newValue);
+        }
+    }
+
+    protected ByteBuffer getBuffer() {
+        return buffer;
+    }
 
 }

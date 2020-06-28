@@ -20,7 +20,7 @@ package com.sparrow.io.buffer;
  *
  * @author ugurkara
  */
-public abstract class DWordIOBuffer<T extends Number> extends IONumberBuffer<T> {
+public abstract class DWordIOBuffer<T extends Number> extends NumberIOBuffer<T> {
 
     public static final int BYTE_SIZE = 4;
 

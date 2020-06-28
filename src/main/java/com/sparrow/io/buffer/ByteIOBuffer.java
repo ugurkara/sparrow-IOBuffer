@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
  *
  * @author ugurkara
  */
-public class ByteIOBuffer extends IONumberBuffer<Byte> {
+public class ByteIOBuffer extends NumberIOBuffer<Byte> {
 
     public ByteIOBuffer(int size) {
         super(size);

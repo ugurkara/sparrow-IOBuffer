@@ -19,11 +19,11 @@ package com.sparrow.io.buffer;
  *
  * @author ugurkara
  */
-public abstract class IONumberBuffer<T extends Number> extends BaseIOBuffer<T> {
+public abstract class NumberIOBuffer<T extends Number> extends BaseIOBuffer<T> {
 
     private int byteOrder = 0;
 
-    public IONumberBuffer(int size) {
+    public NumberIOBuffer(int size) {
         super(size);
     }
 
