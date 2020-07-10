@@ -24,8 +24,8 @@ public abstract class DWordIOBuffer<T extends Number> extends NumberIOBuffer<T> 
 
     public static final int BYTE_SIZE = 4;
 
-    public DWordIOBuffer(int size) {
-        super(size);
+    protected DWordIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override

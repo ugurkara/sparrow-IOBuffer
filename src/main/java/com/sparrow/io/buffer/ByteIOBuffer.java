@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class ByteIOBuffer extends NumberIOBuffer<Byte> {
 
-    public ByteIOBuffer(int size) {
-        super(size);
+    public ByteIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override

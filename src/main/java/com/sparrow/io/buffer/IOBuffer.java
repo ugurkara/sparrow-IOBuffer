@@ -17,6 +17,7 @@ package com.sparrow.io.buffer;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 /**
@@ -25,16 +26,58 @@ import java.util.function.Consumer;
  */
 public class IOBuffer {
 
-    
-
-    private final IOBufferValueListeners listeners ;
+    private final IOBufferValueListeners listeners;
 
     private final ArrayList<BaseIOBuffer> buffers = new ArrayList<>();
+
+    private boolean valid = false;
+
+    private long timeMillis = System.currentTimeMillis();
+
+    private final ArrayList<IOBufferStatusListener> statusListeners = new ArrayList();
     
-    private final long timeMillis=System.currentTimeMillis();
+    private final HashMap<String,Object> properties=new HashMap();
+
+    public HashMap<String, Object> getProperties() {
+        return properties;
+    }
+    
+    
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+        this.timeMillis = System.currentTimeMillis();
+        fireStatusChanged(valid);
+    }
+
+    public long getTimeMillis() {
+        return timeMillis;
+    }
+
+    public void addStatusListener(IOBufferStatusListener listener) {
+        statusListeners.add(listener);
+    }
+
+    public void removeStatusListener(IOBufferStatusListener listener) {
+        statusListeners.remove(listener);
+    }
+
+    protected void fireStatusChanged(boolean status) {
+
+        statusListeners.forEach(new Consumer<IOBufferStatusListener>() {
+            @Override
+            public void accept(IOBufferStatusListener t) {
+                t.statusChanged(status);
+            }
+        });
+    }
 
     protected IOBuffer(int size) {
-        this.listeners =  new IOBufferValueListeners(size);
+        this.listeners = new IOBufferValueListeners(size);
 
     }
 
@@ -57,7 +100,7 @@ public class IOBuffer {
 
         for (int i = 0; i < getSize(); i++) {
             byte get = listeners.getBuffer().get(i);
-            dst.put( get);
+            dst.put(get);
         }
 
     }
@@ -79,9 +122,34 @@ public class IOBuffer {
     private DoubleIOBuffer doubles = null;
     private BooleanIOBuffer bools = null;
 
+    public BaseIOBuffer ofBuffer(DataType dataType) {
+
+        switch (dataType) {
+            case BOOLEAN:
+                return booleanBuffer();
+            case BYTE:
+                return byteBuffer();
+            case SHORT:
+                return shortBuffer();
+            case USHORT:
+                return unsignedShortBuffer();
+            case INTEGER:
+                return integerBuffer();
+            case LONG:
+                return longBuffer();
+            case FLOAT:
+                return floatBuffer();
+            case DOUBLE:
+                return doubleBuffer();
+
+        }
+
+        throw new IllegalArgumentException("Unknow data type " + dataType);
+    }
+
     public BooleanIOBuffer booleanBuffer() {
         if (bools == null) {
-            bools = new BooleanIOBuffer(listeners.getBuffer().capacity());
+            bools = new BooleanIOBuffer(this);
             bools.addListener(listeners.getBooleanListener());
             buffers.add(bools);
         }
@@ -90,7 +158,7 @@ public class IOBuffer {
 
     public ByteIOBuffer byteBuffer() {
         if (bytes == null) {
-            bytes = new ByteIOBuffer(listeners.getBuffer().capacity());
+            bytes = new ByteIOBuffer(this);
             bytes.addListener(listeners.getByteListener());
             buffers.add(bytes);
         }
@@ -99,7 +167,7 @@ public class IOBuffer {
 
     public UShortIOBuffer unsignedShortBuffer() {
         if (unsignedShorts == null) {
-            unsignedShorts = new UShortIOBuffer(listeners.getBuffer().capacity());
+            unsignedShorts = new UShortIOBuffer(this);
             unsignedShorts.addListener(listeners.getUnsignedShortListener());
             buffers.add(unsignedShorts);
         }
@@ -108,7 +176,7 @@ public class IOBuffer {
 
     public ShortIOBuffer shortBuffer() {
         if (shorts == null) {
-            shorts = new ShortIOBuffer(listeners.getBuffer().capacity());
+            shorts = new ShortIOBuffer(this);
             shorts.addListener(listeners.getShortListener());
             buffers.add(shorts);
         }
@@ -117,7 +185,7 @@ public class IOBuffer {
 
     public IntegerIOBuffer integerBuffer() {
         if (integers == null) {
-            integers = new IntegerIOBuffer(listeners.getBuffer().capacity());
+            integers = new IntegerIOBuffer(this);
             integers.addListener(listeners.getIntegerListener());
             buffers.add(integers);
         }
@@ -126,7 +194,7 @@ public class IOBuffer {
 
     public FloatIOBuffer floatBuffer() {
         if (floats == null) {
-            floats = new FloatIOBuffer(listeners.getBuffer().capacity());
+            floats = new FloatIOBuffer(this);
             floats.addListener(listeners.getFloatListener());
             buffers.add(floats);
         }
@@ -135,7 +203,7 @@ public class IOBuffer {
 
     public LongIOBuffer longBuffer() {
         if (longs == null) {
-            longs = new LongIOBuffer(listeners.getBuffer().capacity());
+            longs = new LongIOBuffer(this);
             longs.addListener(listeners.getLongListener());
             buffers.add(longs);
         }
@@ -144,7 +212,7 @@ public class IOBuffer {
 
     public DoubleIOBuffer doubleBuffer() {
         if (doubles == null) {
-            doubles = new DoubleIOBuffer(listeners.getBuffer().capacity());
+            doubles = new DoubleIOBuffer(this);
             doubles.addListener(listeners.getDoubleListener());
             buffers.add(doubles);
         }
@@ -158,11 +226,5 @@ public class IOBuffer {
     public void removeListener(IOBufferChangeListener listener) {
         listeners.removeListener(listener);
     }
-
-    public long getTimeMillis() {
-        return timeMillis;
-    }
-    
-    
 
 }

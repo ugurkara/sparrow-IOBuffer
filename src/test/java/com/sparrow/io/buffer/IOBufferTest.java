@@ -389,5 +389,12 @@ public class IOBufferTest {
         }
 
     }
+    
+    @Test
+    public void testOfBuffer() {
+        IOBuffer.allocate(120).floatBuffer().getIOBuffer().doubleBuffer();
+        IOBuffer.allocate(0).booleanBuffer().getIOBuffer().doubleBuffer();
+    }
+
 
 }

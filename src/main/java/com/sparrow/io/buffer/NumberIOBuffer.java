@@ -23,8 +23,8 @@ public abstract class NumberIOBuffer<T extends Number> extends BaseIOBuffer<T> {
 
     private int byteOrder = 0;
 
-    public NumberIOBuffer(int size) {
-        super(size);
+    protected NumberIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     public int byteOrder() {
@@ -35,6 +35,8 @@ public abstract class NumberIOBuffer<T extends Number> extends BaseIOBuffer<T> {
         this.byteOrder = byteOrder;
     }
 
+
+    
     
 
 }

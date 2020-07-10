@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class DoubleIOBuffer extends LongWordBuffer<Double> {
 
-    public DoubleIOBuffer(int size) {
-        super(size);
+    protected DoubleIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override

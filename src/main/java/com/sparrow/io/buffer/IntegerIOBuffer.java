@@ -25,8 +25,8 @@ public class IntegerIOBuffer extends DWordIOBuffer<Integer> {
 
     
 
-    public IntegerIOBuffer(int size) {
-        super(size);
+    protected IntegerIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override
@@ -52,4 +52,7 @@ public class IntegerIOBuffer extends DWordIOBuffer<Integer> {
         }
     }
 
+
+    
+    
 }

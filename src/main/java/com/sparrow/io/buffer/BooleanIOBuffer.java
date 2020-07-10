@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
 
-    public BooleanIOBuffer(int size) {
-        super(size);
+    protected BooleanIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     protected Byte byteValueOfBit(int index) {
@@ -109,5 +109,9 @@ public class BooleanIOBuffer extends BaseIOBuffer<Boolean> {
             }
         }
     }
+
+    
+    
+    
 
 }

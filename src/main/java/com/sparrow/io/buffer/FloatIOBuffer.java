@@ -25,8 +25,8 @@ public class FloatIOBuffer extends DWordIOBuffer<Float> {
 
 
 
-    public FloatIOBuffer(int size) {
-        super(size);
+    public FloatIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override

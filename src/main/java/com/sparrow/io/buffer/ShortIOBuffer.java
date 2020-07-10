@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class ShortIOBuffer extends WordIOBuffer<Short> {
 
-    public ShortIOBuffer(int size) {
-        super(size);
+    protected ShortIOBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     @Override

@@ -23,8 +23,8 @@ public abstract class LongWordBuffer<T extends Number> extends NumberIOBuffer<T>
 
     public static final int BYTE_SIZE = 8;
 
-    public LongWordBuffer(int size) {
-        super(size);
+    protected LongWordBuffer(IOBuffer buffer) {
+        super(buffer);
     }
 
     protected Long longValue(int index) {

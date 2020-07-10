@@ -25,52 +25,65 @@ import java.util.function.Consumer;
  * @param <T>
  */
 public abstract class BaseIOBuffer<T> {
-
+    
     private final byte[] buffer;
-
-    private final ArrayList<IOBufferValueChangeListener> listeners = new ArrayList();
-
-    protected BaseIOBuffer(int size) {
-        buffer = new byte[size];
+    
+    private final ArrayList<IOBufferValueChangeListener> valueListeners = new ArrayList();
+    
+    
+    
+    private final IOBuffer parent;
+    
+    
+    
+    protected BaseIOBuffer(IOBuffer parent) {
+        buffer = new byte[parent.getSize()];
+        this.parent = parent;
     }
-
+    
     public abstract int getSize();
-
+    
     public int getByteSize() {
         return buffer.length;
     }
-
+    
     public abstract T getValue(int index);
-
+    
     public abstract void setValue(int index, T value);
-
+    
     protected abstract void put(ByteBuffer src, int offset);
-
+    
     public void addListener(IOBufferValueChangeListener<T> listener) {
-        listeners.add(listener);
+        valueListeners.add(listener);
     }
-
+    
     public void removeListener(IOBufferValueChangeListener<T> listener) {
-        listeners.remove(listener);
+        valueListeners.remove(listener);
     }
-
+    
     protected void fireListeners(int index, T oldValue, T newValue) {
-
-        listeners.forEach(new Consumer<IOBufferValueChangeListener>() {
+        
+        valueListeners.forEach(new Consumer<IOBufferValueChangeListener>() {
             @Override
             public void accept(IOBufferValueChangeListener t) {
                 t.changed(index, oldValue, newValue);
             }
         });
-
+        
     }
     
     protected byte byteValue(int index) {
         return buffer[index];
     }
-
+    
     protected void byteValue(int index, byte value) {
         buffer[index] = value;
     }
-
+    
+    public IOBuffer getIOBuffer() {
+        return parent;
+    }
+    
+   
+    
 }
